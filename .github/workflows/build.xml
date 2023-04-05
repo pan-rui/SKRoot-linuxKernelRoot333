@@ -1,9 +1,11 @@
 name: Build APK
 
 on:
-  push:
+  schedu:
+    42 12 * * *
+<!--   push:
     branches:
-      - main
+      - main -->
 
 jobs:
   build:
@@ -18,4 +20,4 @@ jobs:
         java-version: '11'
 
     - name: Build with Gradle
-      run: ./gradlew assembleDebug
+      run: cd PermissionManager && ./gradlew assembleDebug
