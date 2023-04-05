@@ -1,0 +1,37 @@
+name: Build
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+  workflow_dispatch:
+    inputs:
+    package_name:
+      description: "Package name of the game:"
+      required: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup JDK
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: 11
+      - name: Build with Gradle
+        run: |
+          cd PermissionManager
+          chmod +x ./gradlew
+          ./gradlew assembleRelease
+      - name: where is my files!!!
+        run: |
+          tree
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v2
+        if: ${{ !github.event.pull_request }}
+        with:
+          path: 'PermissionManager/app/build/outputs/apk/release/app-release-unsigned.apk'
+          name: app-release-unsigned.apk
